@@ -1,0 +1,70 @@
+ghosting problem
+from manual observation, 
+seems that leakage of green, blue through the red lens, red through the cyan lens is (mainly) due to the lenses, not the eye.
+eg a bright green is perceived by the left eye through red filter as a dark green.
+
+
+for simplicity, suppose want to show a grayscale anaglyph image with ghosting cancelled out.
+
+the right eye (cyan) we might choose to display more blue to reduce ghosting, but suppose go for equal amounts green, blue.
+
+
+for a given spot on the screen, wish to display brightness L to the left eye, brightness R to the right.
+the if we present brightnesses PL, PR, then the eyes will see
+
+PL + leakRL * PR, PR + leakLR * PL.
+
+
+( L ) =  (	1	   leakRL	) * ( PL )
+( R )    (	leakLR	 1		)   ( PR )
+
+
+we can measure leakRL, leakLR
+
+what should PL, PR be given L,R? 
+we can maybe add some constant gray level to L,R , so that 
+
+
+
+red. full red through cyan filter seems like 12-17 red through red filter. (suggesting a leakage of ~ (14.5/255)^2.2 ~ 1/500 leakage of red through cyan filter.
+green full green through red filter seems like 45 green through red filter. (suggesting leakage of (45/255)^2.2 ~ 1/45 leakage of green through red filter.
+blue. actually look very different, suggesting that blue isn't really leaking through! the left eye still sees it as red!
+	full blue through red filter appears red, but is of similar apparent brightness to 21 blue seen through cyan filter. 
+	
+cyan - full cyan through red filter seems like rgb(0,40,0) through cyan filter.
+
+basically, (numbers vary for different displays/standards)
+ LUMA ~ 0.3 R + 0.6 G + 0.1 B
+suppose this is in actual brightness
+luma for cyan is then 0.7
+for cyan to be as bright as full red, srgb values should be (0.3/0.7)^(1/2.2) = 0.68. *255 = 173
+rgb(255,173,173) looks quite pink, but perhaps is more balanced than rgb(255,255,255)
+
+"balanced"
+white																	rgb(255,173,173)
+purple	-	for full blue, use (0.1/0.3)^(1/2.2) = 0.606. *255=155. => 	rgb(155,0,255)
+yellow	-	for full red, use (0.3/0.6)^(1/2.2) = 0.73. *255 = 186  => 	rgb ( 255,186,0)
+
+suppose want to use rgb(255,255,255), balance everything relative to that.
+white																	rgb(255,255,255)
+purple  -   blue is 1/7th of cyan, so use red (1/7)^(1/2.2) =0.41		rgb(105,0,255)
+yellow  -   green is 6/7th of cyan, so use red (6/7)^(1/2.2) =0.93		rgb(238,255,0)
+
+suppose balance everything relative to yellow (255,255,0).	red behaves like 0.6
+white																	rgb(255,238,238)
+purple																	rgb(113,0,255)
+yellow																	rgb(255,255,0)
+
+
+
+perhaps the brightness mismatch problem between eyes is more relative though - that luma should change in the same directi9on for each eye.
+
+
+from looking at these colours on screen, opt for with full white. actually this yellow looks brightest on my monitor (????!!!!)
+
+want some general mapping to display any image in a pallette like this (no 3d yet, just check can show images without brightness conflict)
+
+
+simple grayscale version? (not sure using this hacked luma is right!)
+L = ( R^2.2 + G^2.2 + 1/6 * B^2.2 ) / (13/6)
+R'=G'=B' = L^(1/2.2) 
